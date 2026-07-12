@@ -102,6 +102,19 @@ pure-seed-oil-api/
 
 ## API Reference
 
+### Health Check
+
+| Method | Endpoint  | Description        |
+|--------|-----------|--------------------|
+| `GET`  | `/health` | API health check   |
+
+**Response**
+```json
+{ "status": "healthy" }
+```
+
+---
+
 Base URL: `/api/reviews`
 
 ### Reviews
