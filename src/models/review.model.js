@@ -16,6 +16,8 @@ const reviewSchema = new mongoose.Schema(
     verifiedPurchase: { type: Boolean, default: false },
     helpfulCount: { type: Number, default: 0 },
     status: { type: String, enum: ["pending", "approved"], default: "approved" },
+    phone: { type: String, trim: true, select: false },
+    email: { type: String, trim: true, lowercase: true, select: false },
   },
   { timestamps: true }
 );

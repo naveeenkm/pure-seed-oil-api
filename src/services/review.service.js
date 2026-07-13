@@ -6,8 +6,13 @@ const createReview = async (data, files = []) => {
     contentType: f.mimetype,
     filename: f.originalname,
   }));
-  return await Review.create({ ...data, images });
+  const review = await Review.create({ ...data, images });
+  review.phone = undefined;
+  review.email = undefined;
+  return review;
 };
+
+const EXCLUDE = "-images.data -phone -email";
 
 const getReviews = async ({ page = 1, limit = 10, rating, status = "approved" } = {}) => {
   const filter = { status };
@@ -15,7 +20,7 @@ const getReviews = async ({ page = 1, limit = 10, rating, status = "approved" } 
 
   const skip = (page - 1) * limit;
   const [reviews, total] = await Promise.all([
-    Review.find(filter).sort({ createdAt: -1 }).skip(skip).limit(Number(limit)).select("-images.data"),
+    Review.find(filter).sort({ createdAt: -1 }).skip(skip).limit(Number(limit)).select(EXCLUDE),
     Review.countDocuments(filter),
   ]);
 
@@ -32,11 +37,11 @@ const getReviews = async ({ page = 1, limit = 10, rating, status = "approved" } 
 };
 
 const getReviewById = async (id) => {
-  return await Review.findById(id).select("-images.data");
+  return await Review.findById(id).select(EXCLUDE);
 };
 
 const updateReview = async (id, data) => {
-  return await Review.findByIdAndUpdate(id, data, { new: true, runValidators: true }).select("-images.data");
+  return await Review.findByIdAndUpdate(id, data, { new: true, runValidators: true }).select(EXCLUDE);
 };
 
 const deleteReview = async (id) => {
@@ -44,7 +49,7 @@ const deleteReview = async (id) => {
 };
 
 const incrementHelpful = async (id) => {
-  return await Review.findByIdAndUpdate(id, { $inc: { helpfulCount: 1 } }, { new: true }).select("-images.data");
+  return await Review.findByIdAndUpdate(id, { $inc: { helpfulCount: 1 } }, { new: true }).select(EXCLUDE);
 };
 
 const getStats = async () => {

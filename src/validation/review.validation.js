@@ -7,6 +7,8 @@ const createReviewRules = [
     .withMessage("Rating must be between 1 and 5"),
   body("title").trim().notEmpty().withMessage("Title is required"),
   body("description").trim().notEmpty().withMessage("Description is required"),
+  body("phone").optional({ checkFalsy: true }).trim().isMobilePhone("any").withMessage("Invalid phone number"),
+  body("email").optional({ checkFalsy: true }).trim().isEmail().withMessage("Invalid email address"),
 ];
 
 const paginationRules = [
