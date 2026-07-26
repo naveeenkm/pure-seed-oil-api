@@ -2,12 +2,15 @@ const service = require("../services/admin.service");
 
 const isProd = process.env.NODE_ENV === 'production';
 
+const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || undefined;
+
 const COOKIE_OPTS = {
   httpOnly: true,
-  secure: true,
-  sameSite: 'None',
+  secure: isProd,
+  sameSite: isProd ? 'none' : 'lax',
   path: '/',
   maxAge: 7 * 24 * 60 * 60 * 1000,
+  domain: COOKIE_DOMAIN,
 };
 
 const login = async (req, res, next) => {
@@ -16,6 +19,8 @@ const login = async (req, res, next) => {
     if (!email || !password) return res.status(400).json({ success: false, message: "Email and password required" });
     const { token, admin } = await service.login(email, password);
     res.cookie("admin_token", token, COOKIE_OPTS);
+    const setCookieHeader = res.getHeader && res.getHeader('Set-Cookie');
+    console.log('Set-Cookie header on login:', setCookieHeader);
     res.json({ success: true, data: admin });
   } catch (err) {
     next(err);
