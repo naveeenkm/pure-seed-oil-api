@@ -22,8 +22,6 @@ const login = async (req, res, next) => {
     if (!email || !password) return res.status(400).json({ success: false, message: "Email and password required" });
     const { token, admin } = await service.login(email, password);
     res.cookie("admin_token", token, COOKIE_OPTS);
-    const setCookieHeader = res.getHeader && res.getHeader('Set-Cookie');
-    console.log('Set-Cookie header on login:', setCookieHeader);
     res.json({ success: true, data: admin, token });
   } catch (err) {
     next(err);

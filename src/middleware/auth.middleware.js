@@ -3,15 +3,12 @@ const Admin = require("../models/admin.model");
 
 const requireAdmin = async (req, res, next) => {
   try {
-     console.log("Cookies:", req.cookies);
-    console.log("Cookie Header:", req.headers.cookie);
     let token = req.cookies?.admin_token;
     
     if (!token) {
       const authHeader = req.headers.authorization;
       if (authHeader && authHeader.startsWith("Bearer ")) {
         token = authHeader.slice(7);
-        console.log("Using token from Authorization header");
       }
     }
     
