@@ -10,8 +10,11 @@ const COOKIE_OPTS = {
   sameSite: isProd ? 'none' : 'lax',
   path: '/',
   maxAge: 7 * 24 * 60 * 60 * 1000,
-  domain: COOKIE_DOMAIN,
 };
+
+if (COOKIE_DOMAIN) {
+  COOKIE_OPTS.domain = COOKIE_DOMAIN;
+}
 
 const login = async (req, res, next) => {
   try {
@@ -28,12 +31,14 @@ const login = async (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie("admin_token", {
+  const clearOpts = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
-  });
+  };
+  if (COOKIE_DOMAIN) clearOpts.domain = COOKIE_DOMAIN;
+  res.clearCookie("admin_token", clearOpts);
   res.json({ success: true, message: "Logged out" });
 };
 
