@@ -24,7 +24,7 @@ const login = async (req, res, next) => {
     res.cookie("admin_token", token, COOKIE_OPTS);
     const setCookieHeader = res.getHeader && res.getHeader('Set-Cookie');
     console.log('Set-Cookie header on login:', setCookieHeader);
-    res.json({ success: true, data: admin });
+    res.json({ success: true, data: admin, token });
   } catch (err) {
     next(err);
   }
