@@ -4,8 +4,8 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const COOKIE_OPTS = {
   httpOnly: true,
-  secure: isProd,
-  sameSite: isProd ? 'none' : 'lax',
+  secure: true,
+  sameSite: 'None',
   path: '/',
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
