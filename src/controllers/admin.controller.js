@@ -4,6 +4,7 @@ const COOKIE_OPTS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  path: "/",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
@@ -20,7 +21,12 @@ const login = async (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie("admin_token", { ...COOKIE_OPTS, maxAge: 0 });
+  res.clearCookie("admin_token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+  });
   res.json({ success: true, message: "Logged out" });
 };
 
