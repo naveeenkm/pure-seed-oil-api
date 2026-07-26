@@ -14,6 +14,8 @@ const { seedAdmin } = require("./services/admin.service");
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || "http://localhost:5173,http://localhost:8080,http://localhost:4173,http://localhost:3001").split(",").map((o) => o.trim());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(morgan("dev"));
